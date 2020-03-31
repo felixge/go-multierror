@@ -122,6 +122,19 @@ func TestErrorIs(t *testing.T) {
 		}
 	})
 
+	t.Run("with pointer value", func(t *testing.T) {
+		match := &nestedError{}
+		err := &Error{Errors: []error{
+			errors.New("foo"),
+			match,
+			errors.New("baz"),
+		}}
+
+		if !errors.Is(err, &nestedError{}) {
+			t.Fatal("should be true")
+		}
+	})
+
 	t.Run("with errBar wrapped by fmt.Errorf", func(t *testing.T) {
 		err := &Error{Errors: []error{
 			errors.New("foo"),
